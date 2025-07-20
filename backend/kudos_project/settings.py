@@ -41,6 +41,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'users',
+    'organizations',
+    'kudos',
+    'rest_framework',
+    
 ]
 
 MIDDLEWARE = [
@@ -71,6 +76,8 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'kudos_project.wsgi.application'
+AUTH_USER_MODEL = 'users.User'
+
 
 
 # Database
