@@ -22,3 +22,21 @@ Built with:
 ---
 
 ## 🧰 Folder Structure
+
+kudos-app
+├── backend/
+│ ├── Dockerfile
+│ ├── manage.py
+│ ├── requirements.txt
+│ ├── users/, kudos/, organizations/, etc.
+│
+├── frontend/
+│ ├── Dockerfile
+│ ├── package.json
+│ ├── vite.config.js
+│ ├── src/
+│ └── pages/
+├── .github/workflows/deploy.yml
+├── .env.example
+├── docker-compose.yml
+├── README.md
