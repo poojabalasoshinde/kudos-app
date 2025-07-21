@@ -1,0 +1,73 @@
+name: Deploy Kudos App
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:14
+        env:
+          POSTGRES_DB: kudos_db
+          POSTGRES_USER: kudos_user
+          POSTGRES_PASSWORD: kudos_pass
+        ports: ["5432:5432"]
+
+    env:
+      POSTGRES_DB: kudos_db
+      POSTGRES_USER: kudos_user
+      POSTGRES_PASSWORD: kudos_pass
+      SECRET_KEY: dummykey
+      DEBUG: "True"
+
+    steps:
+    - name:  Checkout code
+      uses: actions/checkout@v3
+
+    # === BACKEND ===
+    - name:  Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.10"
+
+    - name:  Install backend dependencies
+      run: |
+        cd backend
+        pip install -r requirements.txt
+
+    - name:  Run Django migrations + tests
+      run: |
+        cd backend
+        python manage.py migrate
+        python manage.py test
+
+    # === FRONTEND ===
+    - name:  Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: "18"
+
+    - name:  Install frontend dependencies
+      run: |
+        cd frontend
+        npm install
+
+    - name:  Build frontend
+      run: |
+        cd frontend
+        npm run build
+
+    # OPTIONAL: Copy dist to backend/static (for Django static hosting)
+    - name:  Copy build to backend/static
+      run: |
+        mkdir -p backend/static
+        cp -r frontend/dist/* backend/static/
+
+    # === DOCKER BUILD ===
+    - name: 🐳 Build Docker containers
+      run: |
+        docker-compose build

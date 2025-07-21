@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'kudos',
     'rest_framework',
     'rest_framework_simplejwt',
+    "corsheaders",
     
 ]
 
@@ -58,6 +59,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
 ]
 
 ROOT_URLCONF = 'kudos_project.urls'
@@ -91,6 +93,10 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",  # React frontend
+]
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases

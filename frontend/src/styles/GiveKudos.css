@@ -1,0 +1,67 @@
+.givekudos-wrapper {
+    background-color: #0f0f0f;
+    color: white;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+  }
+  
+  .givekudos-card {
+    background-color: #1f1f1f;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .givekudos-title {
+    font-size: 1.6rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+  
+  .givekudos-select,
+  .givekudos-input {
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    background-color: #2b2b2b;
+    color: white;
+  }
+  
+  .givekudos-select:focus,
+  .givekudos-input:focus {
+    outline: 2px solid #6e44ff;
+  }
+  
+  .givekudos-button {
+    padding: 10px;
+    background-color: #6e44ff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s ease-in-out;
+  }
+  
+  .givekudos-button:hover {
+    background-color: #5a36d1;
+  }
+  
+  .givekudos-button:disabled {
+    background-color: #444;
+    cursor: not-allowed;
+  }
+  
+  .givekudos-error {
+    color: #ff5a5a;
+    font-size: 0.9rem;
+  }
+  

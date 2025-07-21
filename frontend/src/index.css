@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 🛠 Must use @layer for Tailwind v4 when applying utilities */
+@layer base {
+  body {
+    @apply bg-gray-900 text-white;
+  }
+}
