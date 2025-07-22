@@ -3,6 +3,10 @@ from django.db import models
 from organizations.models import Organization
 
 class User(AbstractUser):
+    """
+    Custom user model extending Django's default user.
+    Each user belongs to an organization and can give/receive kudos.
+    """
     email = models.EmailField(unique=True)
     organization = models.ForeignKey(
         Organization,

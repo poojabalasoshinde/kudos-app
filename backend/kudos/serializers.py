@@ -4,7 +4,8 @@ from users.models import User
 from datetime import timedelta
 from django.utils.timezone import now
 from .utils import get_remaining_kudos
-from .email import send_kudos_email
+from kudos.services.quota_service import update_kudos_quota
+from kudos.services.email_service import send_kudos_email
 
 
 class UserPublicSerializer(serializers.ModelSerializer):
@@ -58,10 +59,5 @@ class GiveKudosSerializer(serializers.ModelSerializer):
         )
 
         # update quota
-        today = now().date()
-        week_start = today - timedelta(days=today.weekday())
-        quota, _ = KudosQuota.objects.get_or_create(user=giver, week_start=week_start)
-        quota.used += 1
-        quota.save()
-
+        update_kudos_quota(giver)
         return kudos

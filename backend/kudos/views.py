@@ -6,6 +6,7 @@ from django.utils.dateparse import parse_date
 from .utils import get_remaining_kudos
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from kudos.services.query_filters import filter_queryset_by_week
 
 
 class GiveKudosView(generics.CreateAPIView):
@@ -21,12 +22,7 @@ class KudosReceivedView(generics.ListAPIView):
     def get_queryset(self):
         user = self.request.user
         qs = Kudos.objects.filter(receiver=user).order_by('-created_at')
-        week_str = self.request.query_params.get("week")
-        if week_str:
-            week_start = parse_date(week_str)
-            if week_start:
-                week_end = week_start + timedelta(days=7)
-                qs = qs.filter(created_at__date__gte=week_start, created_at__date__lt=week_end)
+        qs = filter_queryset_by_week(qs, self.request.query_params.get("week"))
         return qs
 
 
@@ -37,15 +33,10 @@ class KudosGivenView(generics.ListAPIView):
 
     def get_queryset(self):
         user = self.request.user
-        qs = Kudos.objects.filter(giver=user).order_by('-created_at')
-        week_str = self.request.query_params.get("week")
-        if week_str:
-            week_start = parse_date(week_str)
-            if week_start:
-                week_end = week_start + timedelta(days=7)
-                qs = qs.filter(created_at__date__gte=week_start, created_at__date__lt=week_end)
+        qs = Kudos.objects.filter(giver=user).order_by('-created_at') 
+        qs = filter_queryset_by_week(qs, self.request.query_params.get("week"))
         return qs
-
+        
 class KudosQuotaView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
