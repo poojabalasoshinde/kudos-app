@@ -1,6 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+
 
 /* 🛠 Must use @layer for Tailwind v4 when applying utilities */
 @layer base {

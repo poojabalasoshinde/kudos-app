@@ -1,5 +1,3 @@
-
-
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
@@ -10,6 +8,7 @@ export default function GiveKudos() {
   const [receiver, setReceiver] = useState("");
   const [message, setMessage] = useState("");
   const [quota, setQuota] = useState(0);
+  const [loading, setLoading] = useState(true); // ✅ loader state
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
@@ -25,6 +24,8 @@ export default function GiveKudos() {
       } catch (err) {
         setError("Error loading user list or quota.");
         console.error(err);
+      } finally {
+        setLoading(false); // ✅ stop loader
       }
     };
     fetch();
@@ -44,6 +45,16 @@ export default function GiveKudos() {
       setError(msg);
     }
   };
+
+  if (loading) {
+    return (
+      <div className="givekudos-wrapper">
+        <div className="givekudos-card">
+          <p className="givekudos-title">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="givekudos-wrapper">

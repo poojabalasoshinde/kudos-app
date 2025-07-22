@@ -81,4 +81,24 @@
     color: #aaa;
     margin-top: 0.25rem;
   }
-  
+  .logout-container {
+  margin-top: auto;
+  padding-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.logout-button {
+  background-color: #e53e3e;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.logout-button:hover {
+  background-color: #c53030;
+}

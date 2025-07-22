@@ -1,130 +1,14 @@
-// // import { useState } from "react";
-// // import { useNavigate } from "react-router-dom";
-// // import api from "../api/axios";
-
-// // export default function Login() {
-// //   const [username, setUsername] = useState("");
-// //   const [password, setPassword] = useState("");
-// //   const [error, setError] = useState(null);
-// //   const navigate = useNavigate();
-
-// //   const handleLogin = async (e) => {
-// //     e.preventDefault();
-// //     setError(null);
-// //     try {
-// //       const response = await api.post("token/", { username, password });
-// //       localStorage.setItem("token", response.data.access);
-// //       navigate("/dashboard");
-// //     } catch  {
-// //       setError("Invalid credentials");
-// //     }
-// //   };
-
-// //   return (
-// //     <div className="max-w-md mx-auto mt-20 p-6 bg-white shadow rounded">
-// //       <h2 className="text-xl font-bold mb-4">Login</h2>
-// //       <form onSubmit={handleLogin} className="space-y-4">
-// //         <input
-// //           type="text"
-// //           placeholder="Username"
-// //           className="w-full border px-3 py-2 rounded"
-// //           value={username}
-// //           onChange={(e) => setUsername(e.target.value)}
-// //           required
-// //         />
-// //         <input
-// //           type="password"
-// //           placeholder="Password"
-// //           className="w-full border px-3 py-2 rounded"
-// //           value={password}
-// //           onChange={(e) => setPassword(e.target.value)}
-// //           required
-// //         />
-// //         {error && <p className="text-red-500 text-sm">{error}</p>}
-// //         <button
-// //           type="submit"
-// //           className="bg-blue-600 text-white px-4 py-2 rounded w-full"
-// //         >
-// //           Login
-// //         </button>
-// //       </form>
-// //     </div>
-// //   );
-// // }
-
-
-
-
-// import { useState } from "react";
-// import { useNavigate } from "react-router-dom";
-// import api from "../api/axios";
-
-// export default function Login() {
-//   const [email, setEmail] = useState("");
-//   const [password, setPassword] = useState("");
-//   const [error, setError] = useState("");
-//   const navigate = useNavigate();
-
-//   const handleLogin = async (e) => {
-//     e.preventDefault();
-//     setError("");
-//     try {
-//       const response = await api.post("token/", { username: email, password });
-//       localStorage.setItem("token", response.data.access);
-//       navigate("/dashboard");
-//     } catch {
-//       setError("Invalid credentials.");
-//     }
-//   };
-
-//   return (
-//     <div className="min-h-screen flex items-center justify-center bg-gray-900">
-//       <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md space-y-6">
-//         <h1 className="text-3xl font-bold text-white">Log in</h1>
-//         <form onSubmit={handleLogin} className="space-y-4">
-//           <div>
-//             <label className="block mb-1">Email</label>
-//             <input
-//               type="text"
-//               value={email}
-//               onChange={(e) => setEmail(e.target.value)}
-//               className="w-full p-2 bg-gray-700 text-white rounded focus:outline-none"
-//             />
-//           </div>
-//           <div>
-//             <label className="block mb-1">Password</label>
-//             <input
-//               type="password"
-//               value={password}
-//               onChange={(e) => setPassword(e.target.value)}
-//               className="w-full p-2 bg-gray-700 text-white rounded focus:outline-none"
-//             />
-//           </div>
-//           {error && <p className="text-red-400 text-sm">{error}</p>}
-//           <button
-//             type="submit"
-//             className="w-full bg-purple-600 hover:bg-purple-700 text-white py-2 rounded font-semibold"
-//           >
-//             Log in
-//           </button>
-//         </form>
-//         <p className="text-sm text-gray-400 text-center">
-//           Don't have an account?
-//         </p>
-//       </div>
-//     </div>
-//   );
-// }
-
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import "../styles/Login.css";
 
 export default function Login() {
+  const [isSignup, setIsSignup] = useState(false);
   const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [organization, setOrganization] = useState("1");
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
@@ -140,12 +24,42 @@ export default function Login() {
     }
   };
 
+  const handleSignup = async (e) => {
+    e.preventDefault();
+    setError("");
+    try {
+      await api.post("register/", {
+        username,
+        email,
+        password,
+        organization: parseInt(organization),
+      });
+      alert("Account created successfully! Please log in.");
+      setIsSignup(false);
+      setEmail(username); // autofill login email
+    } catch  {
+      setError("Signup failed. Try another email or username.");
+    }
+  };
+
   return (
     <div className="login-container">
       <div className="login-card">
-        <h1 className="login-title">Log in</h1>
-        <form onSubmit={handleLogin} className="login-form">
-          <label>Email</label>
+        <h1 className="login-title">{isSignup ? "Sign Up" : "Log In"}</h1>
+        <form onSubmit={isSignup ? handleSignup : handleLogin} className="login-form">
+          {isSignup && (
+            <>
+              <label>Username</label>
+              <input
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className="login-input"
+                placeholder="samiya123"
+              />
+            </>
+          )}
+          <label>User Name</label>
           <input
             type="text"
             value={email}
@@ -161,12 +75,34 @@ export default function Login() {
             className="login-input"
             placeholder="••••••••"
           />
+          {isSignup && (
+            <>
+              <label>Organization</label>
+              <select
+                value={organization}
+                onChange={(e) => setOrganization(e.target.value)}
+                className="login-input"
+              >
+                <option value="4">Org 1</option>
+                <option value="5">Org 2</option>
+                <option value="6">Org 3</option>
+              </select>
+            </>
+          )}
           {error && <p className="login-error">{error}</p>}
           <button type="submit" className="login-button">
-            Log in
+            {isSignup ? "Sign Up" : "Log In"}
           </button>
         </form>
-        <p className="login-footer">Don't have an account?</p>
+        <p className="login-footer">
+          {isSignup ? "Already have an account?" : "Don't have an account?"}{" "}
+          <span
+            onClick={() => setIsSignup(!isSignup)}
+            style={{ textDecoration: "underline", cursor: "pointer", color: "#9f7aea" }}
+          >
+            {isSignup ? "Log in" : "Sign up"}
+          </span>
+        </p>
       </div>
     </div>
   );

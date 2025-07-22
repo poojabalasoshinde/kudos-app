@@ -110,7 +110,7 @@ DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL")
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',  # or sqlite3 if needed
+        'ENGINE': 'django.db.backends.postgresql',  
         'NAME': config('POSTGRES_DB', default='kudos_db'),
         'USER': config('POSTGRES_USER', default='kudos_user'),
         'PASSWORD': config('POSTGRES_PASSWORD', default='kudos_pass'),
