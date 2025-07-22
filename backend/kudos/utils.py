@@ -1,18 +1,20 @@
-from datetime import timedelta
-from django.utils.timezone import now
-from .models import KudosQuota
+from datetime import datetime, timedelta
+from .models import Kudos
 
-def get_week_start():
-    """
-    Returns the Monday of the current week.
-    """
-    today = now().date()
+WEEKLY_KUDOS_LIMIT = 3
+
+
+def get_current_week_start():
+    today = datetime.utcnow().date()
     return today - timedelta(days=today.weekday())
 
+
 def get_remaining_kudos(user):
-    """
-    Returns the remaining kudos quota (out of 3) for the user this week.
-    """
-    week_start = get_week_start()
-    quota, _ = KudosQuota.objects.get_or_create(user=user, week_start=week_start)
-    return max(0, 3 - quota.used)
+    week_start = get_current_week_start()
+
+    given_this_week = Kudos.objects.filter(
+        giver=user, created_at__date__gte=week_start
+    ).count()
+
+    remaining = WEEKLY_KUDOS_LIMIT - given_this_week
+    return max(0, remaining)
