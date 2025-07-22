@@ -15,4 +15,4 @@ def get_remaining_kudos(user):
     """
     week_start = get_week_start()
     quota, _ = KudosQuota.objects.get_or_create(user=user, week_start=week_start)
-    return max(0, 3 - quota.used)
+    return max(0, 5 - quota.used)

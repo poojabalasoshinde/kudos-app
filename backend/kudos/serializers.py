@@ -4,6 +4,7 @@ from users.models import User
 from datetime import timedelta
 from django.utils.timezone import now
 from .utils import get_remaining_kudos
+from .email import send_kudos_email
 
 
 class UserPublicSerializer(serializers.ModelSerializer):
@@ -32,13 +33,6 @@ class GiveKudosSerializer(serializers.ModelSerializer):
         if not User.objects.filter(id=receiver_id, organization=giver.organization).exists():
             raise serializers.ValidationError("Receiver does not exist or is not in your organization.")
 
-        # Enforce weekly quota
-        # today = now().date()
-        # week_start = today - timedelta(days=today.weekday())
-
-        # quota, _ = KudosQuota.objects.get_or_create(user=giver, week_start=week_start)
-        # if quota.used >= 3:
-        #     raise serializers.ValidationError("Weekly kudos limit reached (3/3).")
         
         if get_remaining_kudos(giver) <= 0:
             raise serializers.ValidationError("Weekly kudos limit reached (3/3).")
@@ -54,6 +48,13 @@ class GiveKudosSerializer(serializers.ModelSerializer):
             giver=giver,
             receiver=receiver,
             message=validated_data['message']
+        )
+        
+    
+        send_kudos_email(
+            receiver.email,
+            giver.username,
+            validated_data['message']
         )
 
         # update quota
